@@ -4,10 +4,8 @@ import { Top } from '@pages/Top';
 
 export const App: Component = () => {
   return (
-    <div class="h-screen">
-      <Routes>
-        <Route path="/" element={<Top />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Top />} />
+    </Routes>
   );
 };
