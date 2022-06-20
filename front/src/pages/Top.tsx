@@ -1,9 +1,9 @@
 import { Component } from 'solid-js';
 import { gql, createGraphQLClient } from '@solid-primitives/graphql';
-import { Unnamed_1_Query } from '../generated/graphql';
+import { HelloQuery } from '../generated/graphql';
 
 const helloQueryDocument = gql`
-  query {
+  query hello {
     hello {
       message
     }
@@ -12,7 +12,7 @@ const helloQueryDocument = gql`
 
 export const Top: Component = () => {
   const newQuery = createGraphQLClient('http://localhost:8080/graphql');
-  const [data] = newQuery<Unnamed_1_Query>(helloQueryDocument);
+  const [data] = newQuery<HelloQuery>(helloQueryDocument);
 
   return (
     <div class="flex flex-col text-md p-4">

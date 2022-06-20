@@ -47,7 +47,7 @@ export type User = {
   name: Scalars['String'];
 };
 
-export type Unnamed_1_QueryVariables = Exact<{ [key: string]: never; }>;
+export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type Unnamed_1_Query = { hello: { message: string } };
+export type HelloQuery = { hello: { message: string } };
