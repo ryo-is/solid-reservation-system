@@ -14,8 +14,11 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Hello(ctx context.Context) (string, error) {
-	return "Hello World!!!", nil
+func (r *queryResolver) Hello(ctx context.Context) (*model.Hello, error) {
+	message := "Hello World!!!"
+	return &model.Hello{
+		Message: message,
+	}, nil
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {

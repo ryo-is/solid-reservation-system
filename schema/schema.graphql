@@ -14,8 +14,12 @@ type User {
   name: String!
 }
 
+type Hello {
+  message: String!
+}
+
 type Query {
-  hello: String!
+  hello: Hello!
   todos: [Todo!]!
 }
 
