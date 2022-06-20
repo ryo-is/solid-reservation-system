@@ -15,6 +15,7 @@ type User {
 }
 
 type Query {
+  hello: String!
   todos: [Todo!]!
 }
 
