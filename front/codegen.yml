@@ -8,5 +8,8 @@ generates:
     plugins:
       - 'typescript'
       - 'typescript-operations'
+  src/generated/graphql.schema.json:
+    plugins:
+      - 'introspection'
 config:
   skipTypename: true
