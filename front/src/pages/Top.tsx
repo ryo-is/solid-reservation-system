@@ -1,6 +1,11 @@
 import { Component } from 'solid-js';
-import { gql, createGraphQLClient } from '@solid-primitives/graphql';
-import { HelloQuery } from '../generated/graphql';
+import { gql } from '@solid-primitives/graphql';
+import {
+  HelloQuery,
+  GetUserQuery,
+  GetUserQueryVariables,
+} from '../graphql/generated/graphql';
+import { createQuery } from '../graphql';
 
 const helloQueryDocument = gql`
   query hello {
@@ -10,14 +15,34 @@ const helloQueryDocument = gql`
   }
 `;
 
+const getUserDocument = gql`
+  query getUser($userId: ID!) {
+    user(userId: $userId) {
+      id
+      name
+      kana
+      address
+      email
+      tell
+      memo
+    }
+  }
+`;
+
 export const Top: Component = () => {
-  const newQuery = createGraphQLClient('http://localhost:8080/graphql');
-  const [data] = newQuery<HelloQuery>(helloQueryDocument);
+  const [helloData] = createQuery<HelloQuery>(helloQueryDocument);
+  const [user] = createQuery<GetUserQuery, GetUserQueryVariables>(
+    getUserDocument,
+    {
+      userId: 'test',
+    }
+  );
 
   return (
     <div class="flex flex-col text-md p-4">
       <div>Reservation</div>
-      <div>{data()?.hello.message}</div>
+      <div>{helloData()?.hello.message}</div>
+      <div>{user()?.user.id}</div>
     </div>
   );
 };

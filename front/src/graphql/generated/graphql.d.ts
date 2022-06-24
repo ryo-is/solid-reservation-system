@@ -12,42 +12,56 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddUser = {
+  address: Scalars['String'];
+  email: Scalars['String'];
+  kana: Scalars['String'];
+  memo: Scalars['String'];
+  name: Scalars['String'];
+  tell: Scalars['String'];
+};
+
 export type Hello = {
   message: Scalars['String'];
 };
 
 export type Mutation = {
-  createTodo: Todo;
+  addUser: User;
 };
 
 
-export type MutationCreateTodoArgs = {
-  input: NewTodo;
-};
-
-export type NewTodo = {
-  text: Scalars['String'];
-  userId: Scalars['String'];
+export type MutationAddUserArgs = {
+  input: AddUser;
 };
 
 export type Query = {
   hello: Hello;
-  todos: Array<Todo>;
-};
-
-export type Todo = {
-  done: Scalars['Boolean'];
-  id: Scalars['ID'];
-  text: Scalars['String'];
   user: User;
 };
 
+
+export type QueryUserArgs = {
+  userId: Scalars['ID'];
+};
+
 export type User = {
+  address: Scalars['String'];
+  email: Scalars['String'];
   id: Scalars['ID'];
+  kana: Scalars['String'];
+  memo: Scalars['String'];
   name: Scalars['String'];
+  tell: Scalars['String'];
 };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type HelloQuery = { hello: { message: string } };
+
+export type GetUserQueryVariables = Exact<{
+  userId: Scalars['ID'];
+}>;
+
+
+export type GetUserQuery = { user: { id: string, name: string, kana: string, address: string, email: string, tell: string, memo: string } };
