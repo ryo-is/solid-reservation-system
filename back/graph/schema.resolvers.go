@@ -7,7 +7,6 @@ import (
 	"back/graph/generated"
 	"back/graph/model"
 	"context"
-	"fmt"
 )
 
 func (r *mutationResolver) AddUser(ctx context.Context, input model.AddUser) (*model.User, error) {
@@ -23,14 +22,12 @@ func (r *mutationResolver) AddUser(ctx context.Context, input model.AddUser) (*m
 }
 
 func (r *queryResolver) Hello(ctx context.Context) (*model.Hello, error) {
-	fmt.Printf("hello")
 	return &model.Hello{
 		Message: "Hello World!!!",
 	}, nil
 }
 
 func (r *queryResolver) User(ctx context.Context, userID string) (*model.User, error) {
-	fmt.Printf("User")
 	return &model.User{
 		ID:     userID,
 		Name:   "name1",
