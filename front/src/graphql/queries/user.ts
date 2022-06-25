@@ -21,6 +21,9 @@ const getUserDocument = gql`
 `;
 
 export const useGetUserQuery = (userId: Accessor<string>) =>
-  createQuery<GetUserQuery, GetUserQueryVariables>(getUserDocument, () => ({
-    userId: userId(),
-  }));
+  createQuery<GetUserQuery, () => GetUserQueryVariables>(
+    getUserDocument,
+    () => ({
+      userId: userId(),
+    })
+  );
