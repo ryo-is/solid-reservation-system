@@ -44,17 +44,13 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	Hello struct {
-		Message func(childComplexity int) int
-	}
-
 	Mutation struct {
 		AddUser func(childComplexity int, input model.AddUser) int
 	}
 
 	Query struct {
-		Hello func(childComplexity int) int
-		User  func(childComplexity int, userID string) int
+		User    func(childComplexity int, userID string) int
+		Version func(childComplexity int) int
 	}
 
 	User struct {
@@ -66,13 +62,17 @@ type ComplexityRoot struct {
 		Name    func(childComplexity int) int
 		Tell    func(childComplexity int) int
 	}
+
+	Version struct {
+		Version func(childComplexity int) int
+	}
 }
 
 type MutationResolver interface {
 	AddUser(ctx context.Context, input model.AddUser) (*model.User, error)
 }
 type QueryResolver interface {
-	Hello(ctx context.Context) (*model.Hello, error)
+	Version(ctx context.Context) (*model.Version, error)
 	User(ctx context.Context, userID string) (*model.User, error)
 }
 
@@ -91,13 +91,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Hello.message":
-		if e.complexity.Hello.Message == nil {
-			break
-		}
-
-		return e.complexity.Hello.Message(childComplexity), true
-
 	case "Mutation.addUser":
 		if e.complexity.Mutation.AddUser == nil {
 			break
@@ -110,13 +103,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.AddUser(childComplexity, args["input"].(model.AddUser)), true
 
-	case "Query.hello":
-		if e.complexity.Query.Hello == nil {
-			break
-		}
-
-		return e.complexity.Query.Hello(childComplexity), true
-
 	case "Query.user":
 		if e.complexity.Query.User == nil {
 			break
@@ -128,6 +114,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.User(childComplexity, args["userId"].(string)), true
+
+	case "Query.version":
+		if e.complexity.Query.Version == nil {
+			break
+		}
+
+		return e.complexity.Query.Version(childComplexity), true
 
 	case "User.address":
 		if e.complexity.User.Address == nil {
@@ -177,6 +170,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.Tell(childComplexity), true
+
+	case "Version.version":
+		if e.complexity.Version.Version == nil {
+			break
+		}
+
+		return e.complexity.Version.Version(childComplexity), true
 
 	}
 	return 0, false
@@ -266,12 +266,12 @@ input AddUser {
   memo: String!
 }
 
-type Hello {
-  message: String!
+type Version {
+  version: String!
 }
 
 type Query {
-  hello: Hello!
+  version: Version!
   user(userId: ID!): User!
 }
 
@@ -369,50 +369,6 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Hello_message(ctx context.Context, field graphql.CollectedField, obj *model.Hello) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Hello_message(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Message, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Hello_message(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Hello",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_addUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_addUser(ctx, field)
 	if err != nil {
@@ -484,8 +440,8 @@ func (ec *executionContext) fieldContext_Mutation_addUser(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_hello(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_hello(ctx, field)
+func (ec *executionContext) _Query_version(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_version(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -498,7 +454,7 @@ func (ec *executionContext) _Query_hello(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Hello(rctx)
+		return ec.resolvers.Query().Version(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -510,12 +466,12 @@ func (ec *executionContext) _Query_hello(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Hello)
+	res := resTmp.(*model.Version)
 	fc.Result = res
-	return ec.marshalNHello2ᚖbackᚋgraphᚋmodelᚐHello(ctx, field.Selections, res)
+	return ec.marshalNVersion2ᚖbackᚋgraphᚋmodelᚐVersion(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_hello(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_version(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -523,10 +479,10 @@ func (ec *executionContext) fieldContext_Query_hello(ctx context.Context, field 
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "message":
-				return ec.fieldContext_Hello_message(ctx, field)
+			case "version":
+				return ec.fieldContext_Version_version(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Hello", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Version", field.Name)
 		},
 	}
 	return fc, nil
@@ -1030,6 +986,50 @@ func (ec *executionContext) _User_memo(ctx context.Context, field graphql.Collec
 func (ec *executionContext) fieldContext_User_memo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "User",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Version_version(ctx context.Context, field graphql.CollectedField, obj *model.Version) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Version_version(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Version, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Version_version(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Version",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2884,34 +2884,6 @@ func (ec *executionContext) unmarshalInputAddUser(ctx context.Context, obj inter
 
 // region    **************************** object.gotpl ****************************
 
-var helloImplementors = []string{"Hello"}
-
-func (ec *executionContext) _Hello(ctx context.Context, sel ast.SelectionSet, obj *model.Hello) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, helloImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Hello")
-		case "message":
-
-			out.Values[i] = ec._Hello_message(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var mutationImplementors = []string{"Mutation"}
 
 func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -2970,7 +2942,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "hello":
+		case "version":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -2979,7 +2951,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_hello(ctx, field)
+				res = ec._Query_version(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -3094,6 +3066,34 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		case "memo":
 
 			out.Values[i] = ec._User_memo(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var versionImplementors = []string{"Version"}
+
+func (ec *executionContext) _Version(ctx context.Context, sel ast.SelectionSet, obj *model.Version) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, versionImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Version")
+		case "version":
+
+			out.Values[i] = ec._Version_version(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -3447,20 +3447,6 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNHello2backᚋgraphᚋmodelᚐHello(ctx context.Context, sel ast.SelectionSet, v model.Hello) graphql.Marshaler {
-	return ec._Hello(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNHello2ᚖbackᚋgraphᚋmodelᚐHello(ctx context.Context, sel ast.SelectionSet, v *model.Hello) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Hello(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3503,6 +3489,20 @@ func (ec *executionContext) marshalNUser2ᚖbackᚋgraphᚋmodelᚐUser(ctx cont
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNVersion2backᚋgraphᚋmodelᚐVersion(ctx context.Context, sel ast.SelectionSet, v model.Version) graphql.Marshaler {
+	return ec._Version(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNVersion2ᚖbackᚋgraphᚋmodelᚐVersion(ctx context.Context, sel ast.SelectionSet, v *model.Version) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Version(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

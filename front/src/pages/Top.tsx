@@ -1,48 +1,23 @@
-import { Component } from 'solid-js';
-import { gql } from '@solid-primitives/graphql';
-import {
-  HelloQuery,
-  GetUserQuery,
-  GetUserQueryVariables,
-} from '../graphql/generated/graphql';
-import { createQuery } from '../graphql';
-
-const helloQueryDocument = gql`
-  query hello {
-    hello {
-      message
-    }
-  }
-`;
-
-const getUserDocument = gql`
-  query getUser($userId: ID!) {
-    user(userId: $userId) {
-      id
-      name
-      kana
-      address
-      email
-      tell
-      memo
-    }
-  }
-`;
+import { Component, createSignal } from 'solid-js';
+import { useGetUserQuery } from '@graphql/queries/user';
 
 export const Top: Component = () => {
-  const [helloData] = createQuery<HelloQuery>(helloQueryDocument);
-  const [user] = createQuery<GetUserQuery, GetUserQueryVariables>(
-    getUserDocument,
-    {
-      userId: 'test',
-    }
-  );
+  const [userId, setUserId] = createSignal('test-id');
+  const [user, { refetch }] = useGetUserQuery(userId);
 
   return (
     <div class="flex flex-col text-md p-4">
       <div>Reservation</div>
-      <div>{helloData()?.hello.message}</div>
-      <div>{user()?.user.id}</div>
+      <div class="my-2">req: {userId()}</div>
+      <div class="my-2">res: {user()?.user.id}</div>
+      <input
+        class="input my-2 text-lg w-[240px] bg-zinc-300 text-zinc-800"
+        value={userId()}
+        onChange={(e) => {
+          setUserId(e.currentTarget.value);
+          refetch();
+        }}
+      />
     </div>
   );
 };

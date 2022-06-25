@@ -11,31 +11,31 @@ import (
 
 func (r *mutationResolver) AddUser(ctx context.Context, input model.AddUser) (*model.User, error) {
 	return &model.User{
-		ID:     "id-adduser",
-		Name:   input.Name,
-		Kana:   input.Kana,
+		ID:      "id-adduser",
+		Name:    input.Name,
+		Kana:    input.Kana,
 		Address: input.Address,
-		Email: input.Email,
-		Tell: input.Tell,
-		Memo: input.Memo,
+		Email:   input.Email,
+		Tell:    input.Tell,
+		Memo:    input.Memo,
 	}, nil
 }
 
-func (r *queryResolver) Hello(ctx context.Context) (*model.Hello, error) {
-	return &model.Hello{
-		Message: "Hello World!!!",
+func (r *queryResolver) Version(ctx context.Context) (*model.Version, error) {
+	return &model.Version{
+		Version: "0.0.1",
 	}, nil
 }
 
 func (r *queryResolver) User(ctx context.Context, userID string) (*model.User, error) {
 	return &model.User{
-		ID:     userID,
-		Name:   "name1",
-		Kana:   "kana1",
+		ID:      userID,
+		Name:    "name1",
+		Kana:    "kana1",
 		Address: "address1",
-		Email: "email1",
-		Tell: "tell1",
-		Memo: "memo1",
+		Email:   "email1",
+		Tell:    "tell1",
+		Memo:    "memo1",
 	}, nil
 }
 

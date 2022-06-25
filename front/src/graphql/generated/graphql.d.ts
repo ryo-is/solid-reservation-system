@@ -21,10 +21,6 @@ export type AddUser = {
   tell: Scalars['String'];
 };
 
-export type Hello = {
-  message: Scalars['String'];
-};
-
 export type Mutation = {
   addUser: User;
 };
@@ -35,8 +31,8 @@ export type MutationAddUserArgs = {
 };
 
 export type Query = {
-  hello: Hello;
   user: User;
+  version: Version;
 };
 
 
@@ -54,10 +50,9 @@ export type User = {
   tell: Scalars['String'];
 };
 
-export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type HelloQuery = { hello: { message: string } };
+export type Version = {
+  version: Scalars['String'];
+};
 
 export type GetUserQueryVariables = Exact<{
   userId: Scalars['ID'];

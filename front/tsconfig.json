@@ -15,7 +15,8 @@
     "paths": {
       "@pages/*": ["./src/pages/*"],
       "@components/*": ["./src/components/*"],
-      "@contexts/*": ["./src/contexts/*"]
+      "@graphql": ["./src/graphql"],
+      "@graphql/*": ["./src/graphql/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

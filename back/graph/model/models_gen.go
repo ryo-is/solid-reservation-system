@@ -11,10 +11,6 @@ type AddUser struct {
 	Memo    string `json:"memo"`
 }
 
-type Hello struct {
-	Message string `json:"message"`
-}
-
 type User struct {
 	ID      string `json:"id"`
 	Name    string `json:"name"`
@@ -23,4 +19,8 @@ type User struct {
 	Email   string `json:"email"`
 	Tell    string `json:"tell"`
 	Memo    string `json:"memo"`
+}
+
+type Version struct {
+	Version string `json:"version"`
 }

@@ -17,12 +17,12 @@ input AddUser {
   memo: String!
 }
 
-type Hello {
-  message: String!
+type Version {
+  version: String!
 }
 
 type Query {
-  hello: Hello!
+  version: Version!
   user(userId: ID!): User!
 }
 

@@ -81,7 +81,7 @@ export const DatePicker: Component<IDatePicker> = (props) => {
           class="input text-lg w-full bg-zinc-300"
           value={props.date}
           readonly
-        ></input>
+        />
         <div class="absolute top-0 right-0 px-3 py-3 cursor-pointer">
           <Svg name="calendar" />
         </div>
