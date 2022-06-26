@@ -1,5 +1,5 @@
 import { Component, children, JSX } from 'solid-js';
-import { Navbar } from '@components/Navbar';
+import { Navbar } from '@components/layouts/Navbar';
 import { MenuDrawer } from './MenuDrawer';
 
 interface LayoutProps {

@@ -4,7 +4,7 @@ import { Router } from 'solid-app-router';
 
 import './index.css';
 import { App } from './App';
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/layouts/Layout';
 
 render(
   () => (

@@ -38,6 +38,7 @@
     "dayjs": "1.11.3",
     "graphql": "16.5.0",
     "solid-app-router": "0.3.3",
+    "solid-icons": "0.4.13",
     "solid-js": "1.4.4"
   }
 }

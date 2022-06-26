@@ -32,6 +32,7 @@ export type MutationAddUserArgs = {
 
 export type Query = {
   user: User;
+  users: Array<User>;
   version: Version;
 };
 
@@ -60,3 +61,8 @@ export type GetUserQueryVariables = Exact<{
 
 
 export type GetUserQuery = { user: { id: string, name: string, kana: string, address: string, email: string, tell: string, memo: string } };
+
+export type GetUserListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserListQuery = { users: Array<{ id: string, name: string, kana: string, address: string, email: string, tell: string, memo: string }> };

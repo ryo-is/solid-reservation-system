@@ -99,5 +99,5 @@ const icons = {
 };
 
 export const Svg: Component<{ name: keyof typeof icons }> = (props) => {
-  return <>{icons[props.name] || <div>No Image</div>}</>;
+  return <>{icons[props.name] || <div />}</>;
 };

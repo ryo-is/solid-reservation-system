@@ -24,6 +24,7 @@ type Version {
 type Query {
   version: Version!
   user(userId: ID!): User!
+  users: [User!]!
 }
 
 type Mutation {

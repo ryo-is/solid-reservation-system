@@ -2,6 +2,7 @@ import { gql } from '@solid-primitives/graphql';
 import {
   GetUserQuery,
   GetUserQueryVariables,
+  GetUserListQuery,
 } from '@graphql/generated/graphql';
 import { createQuery } from '@graphql';
 import { Accessor } from 'solid-js';
@@ -20,6 +21,20 @@ const getUserDocument = gql`
   }
 `;
 
+const getUserListDocument = gql`
+  query getUserList {
+    users {
+      id
+      name
+      kana
+      address
+      email
+      tell
+      memo
+    }
+  }
+`;
+
 export const useGetUserQuery = (userId: Accessor<string>) =>
   createQuery<GetUserQuery, () => GetUserQueryVariables>(
     getUserDocument,
@@ -27,3 +42,6 @@ export const useGetUserQuery = (userId: Accessor<string>) =>
       userId: userId(),
     })
   );
+
+export const useGetUserListQuery = () =>
+  createQuery<GetUserListQuery>(getUserListDocument);

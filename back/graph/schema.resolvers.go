@@ -33,10 +33,30 @@ func (r *queryResolver) User(ctx context.Context, userID string) (*model.User, e
 		Name:    "name1",
 		Kana:    "kana1",
 		Address: "address1",
-		Email:   "email1",
-		Tell:    "tell1",
+		Email:   "email1@example.com",
+		Tell:    "08011111111",
 		Memo:    "memo1",
 	}, nil
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	return []*model.User{{
+		ID:   	 "1" ,
+		Name:    "name1",
+		Kana:    "かな1",
+		Address: "address1",
+		Email:   "email1@example.com",
+		Tell:    "08011111111",
+		Memo:    "memo1",
+	}, {
+		ID:   	 "2" ,
+		Name:    "name2",
+		Kana:    "かな2",
+		Address: "address2",
+		Email:   "email2@example.com",
+		Tell:    "08022222222",
+		Memo:    "memo2",
+	}}, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
